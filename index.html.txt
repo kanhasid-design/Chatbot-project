@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Chatbot Interface</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .chat-container {
+        width: 400px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        background: #4CAF50;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .chat-box {
+        height: 350px;
+        padding: 10px;
+        overflow-y: auto;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .message {
+        margin: 8px 0;
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 75%;
+    }
+
+    .user {
+        background: #dcf8c6;
+        align-self: flex-end;
+        text-align: right;
+    }
+
+    .bot {
+        background: #eee;
+        align-self: flex-start;
+    }
+
+    .chat-input {
+        display: flex;
+        padding: 10px;
+    }
+
+    input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        padding: 10px 15px;
+        margin-left: 5px;
+        border: none;
+        background: #4CAF50;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #45a049;
+    }
+
+    .database-log {
+        font-size: 12px;
+        padding: 10px;
+        background: #fafafa;
+        border-top: 1px solid #ddd;
+        height: 100px;
+        overflow-y: auto;
+    }
+</style>
+</head>
+<body>
+
+<div class="chat-container">
+
+    <!-- 5.7.1 Chatbot Interface -->
+    <div class="chat-header">
+        AI Chatbot
+    </div>
+
+    <!-- Chat Window -->
+    <div class="chat-box" id="chatBox"></div>
+
+    <!-- 5.7.2 User Input -->
+    <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Type your question here...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <!-- 5.7.5 Database Output -->
+    <div class="database-log" id="dbLog">
+        <strong>Database Log:</strong><br>
+    </div>
+
+</div>
+
+<script>
+
+function sendMessage() {
+    let inputField = document.getElementById("userInput");
+    let userText = inputField.value.trim();
+
+    if (userText === "") {
+        alert("Please enter a query.");
+        return;
+    }
+
+    displayMessage(userText, "user");
+
+    let botResponse = getBotResponse(userText);
+
+    setTimeout(() => {
+        displayMessage(botResponse, "bot");
+        logToDatabase(userText, botResponse);
+    }, 500);
+
+    inputField.value = "";
+}
+
+// Display messages
+function displayMessage(text, sender) {
+    let chatBox = document.getElementById("chatBox");
+
+    let msg = document.createElement("div");
+    msg.classList.add("message", sender);
+    msg.innerText = text;
+
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// 5.7.3 + 5.7.4 Response + Error Handling
+function getBotResponse(input) {
+    input = input.toLowerCase();
+
+    if (input.includes("courses")) {
+        return "We offer courses in Data Science, AI, and Web Development.";
+    }
+    else if (input.includes("enroll")) {
+        return "You can enroll through our website by clicking on the 'Enroll Now' button.";
+    }
+    else if (input.includes("payment")) {
+        return "We support online payments via card, UPI, and net banking.";
+    }
+    else {
+        return "Sorry, I didn’t understand your query.";
+    }
+}
+
+// 5.7.5 Database Simulation
+function logToDatabase(query, response) {
+    let db = document.getElementById("dbLog");
+
+    let logEntry = document.createElement("div");
+    logEntry.innerHTML = "<b>Q:</b> " + query + "<br><b>A:</b> " + response + "<hr>";
+
+    db.appendChild(logEntry);
+    db.scrollTop = db.scrollHeight;
+}
+
+</script>
+
+</body>
+</html>
